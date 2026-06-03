@@ -8,7 +8,8 @@ export interface Module {
   title: string;
   description: string;
   duration: string;
-  duties: string[]; // duties unlocked on completion
+  duties: string[]; // duties unlocked once a supervisor signs off
+  competencies: string[]; // observable behaviors a supervisor checks off
 }
 
 // A module placed into a specific curriculum at a specific track day.
@@ -28,8 +29,11 @@ export interface Curriculum {
 
 export interface ParaProgress {
   moduleId: string;
-  completed: boolean;
-  completedDate?: string;
+  completed: boolean;            // signed off by a supervisor → duties unlocked
+  completedDate?: string;        // date of supervisor sign-off
+  submittedForSignoff?: boolean; // para watched + attested, awaiting supervisor review
+  submittedDate?: string;
+  signedOffBy?: string;          // supervisor name
 }
 
 export interface Para {

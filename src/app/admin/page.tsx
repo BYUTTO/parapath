@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useStore, getParaTrackStatus, getUnlockedDuties, getCompletionPct, getCurrentTrack } from '@/lib/store';
+import { useStore, getParaTrackStatus, getUnlockedDuties, getCompletionPct, getCurrentTrack, getPendingSignoffs } from '@/lib/store';
 import { MODULE_MAP } from '@/lib/demo-data';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { BookOpen, AlertTriangle, CheckCircle, Clock, ChevronLeft, Unlock, X, LayoutGrid } from 'lucide-react';
+import { BookOpen, AlertTriangle, CheckCircle, Clock, ChevronLeft, Unlock, X, LayoutGrid, ClipboardCheck, FileSpreadsheet } from 'lucide-react';
 
 const STATUS_CONFIG = {
   complete:     { label: 'Complete',     color: 'bg-emerald-100 text-emerald-700', icon: <CheckCircle className="h-3.5 w-3.5" /> },
@@ -18,6 +18,7 @@ const STATUS_CONFIG = {
 export default function AdminPage() {
   const { paras, getParaCurriculum } = useStore();
   const [selected, setSelected] = useState<string | null>(null);
+  const pendingCount = getPendingSignoffs(paras).length;
 
   const rows = paras.map(p => {
     const curriculum = getParaCurriculum(p);
@@ -46,10 +47,16 @@ export default function AdminPage() {
         <span className="text-slate-300">/</span>
         <span className="text-sm text-slate-500">Admin Dashboard</span>
         <div className="ml-auto flex items-center gap-4">
+          <Link href="/supervisor" className="flex items-center gap-1.5 text-sm text-slate-600 hover:text-indigo-600 transition-colors">
+            <ClipboardCheck className="h-4 w-4" /> Sign-offs
+            {pendingCount > 0 && <span className="bg-blue-600 text-white text-xs rounded-full px-1.5 py-0.5 leading-none">{pendingCount}</span>}
+          </Link>
+          <Link href="/admin/compliance" className="flex items-center gap-1.5 text-sm text-slate-600 hover:text-indigo-600 transition-colors">
+            <FileSpreadsheet className="h-4 w-4" /> Compliance
+          </Link>
           <Link href="/admin/curriculums" className="flex items-center gap-1.5 text-sm text-slate-600 hover:text-indigo-600 transition-colors">
             <LayoutGrid className="h-4 w-4" /> Curriculums
           </Link>
-          <span className="text-xs text-slate-400">Riverside USD</span>
         </div>
       </nav>
 

@@ -3,10 +3,10 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useStore } from '@/lib/store';
-import { Curriculum, CurriculumModule, TrackDay, PARA_ROLES } from '@/lib/types';
+import { Curriculum, CurriculumModule, Module, TrackDay, PARA_ROLES } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { BookOpen, ChevronLeft, Plus, Pencil, Trash2, Users, Clock, RotateCcw } from 'lucide-react';
+import { BookOpen, ChevronLeft, Plus, Pencil, Trash2, Users, Clock, RotateCcw, X } from 'lucide-react';
 
 export default function CurriculumsPage() {
   const { curriculums, paras, modules, saveCurriculum, deleteCurriculum, resetDemo } = useStore();
@@ -88,11 +88,12 @@ export default function CurriculumsPage() {
 }
 
 function CurriculumEditor({ initial, onCancel, onSave }: { initial: Curriculum; onCancel: () => void; onSave: (c: Curriculum) => void }) {
-  const { modules } = useStore();
+  const { modules, addModule } = useStore();
   const [name, setName] = useState(initial.name);
   const [description, setDescription] = useState(initial.description);
   const [roles, setRoles] = useState<string[]>(initial.appliesToRoles);
   const [picked, setPicked] = useState<CurriculumModule[]>(initial.modules);
+  const [showNewModule, setShowNewModule] = useState(false);
 
   const isIncluded = (id: string) => picked.some(p => p.moduleId === id);
   const dayOf = (id: string) => picked.find(p => p.moduleId === id)?.day ?? 30;
@@ -149,6 +150,13 @@ function CurriculumEditor({ initial, onCancel, onSave }: { initial: Curriculum; 
             <span className="text-xs text-slate-400">{picked.length} selected</span>
           </div>
           <p className="text-sm text-slate-500 mb-4">Toggle modules into this curriculum and set which track day each belongs to.</p>
+
+          {showNewModule
+            ? <NewModuleForm onCancel={() => setShowNewModule(false)} onCreate={(m) => { addModule(m); setPicked(prev => [...prev, { moduleId: m.id, day: 30 }]); setShowNewModule(false); }} />
+            : <button onClick={() => setShowNewModule(true)} className="w-full mb-3 flex items-center justify-center gap-1.5 text-sm text-indigo-600 border border-dashed border-indigo-200 rounded-lg py-2 hover:bg-indigo-50 transition-colors">
+                <Plus className="h-3.5 w-3.5" /> Create a custom module
+              </button>
+          }
 
           <div className="space-y-2">
             {modules.map(mod => {
@@ -218,6 +226,55 @@ function CurriculumEditor({ initial, onCancel, onSave }: { initial: Curriculum; 
           <Button onClick={onCancel} variant="outline">Cancel</Button>
           {!canSave && <span className="text-xs text-slate-400">Name and at least one module required</span>}
         </div>
+      </div>
+    </div>
+  );
+}
+
+function NewModuleForm({ onCancel, onCreate }: { onCancel: () => void; onCreate: (m: Module) => void }) {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [duration, setDuration] = useState('');
+  const [duties, setDuties] = useState('');
+  const [competencies, setCompetencies] = useState('');
+
+  const splitLines = (s: string) => s.split(/[\n,]/).map(x => x.trim()).filter(Boolean);
+  const canCreate = title.trim() && splitLines(duties).length > 0 && splitLines(competencies).length > 0;
+
+  const create = () => {
+    const id = `m_${Math.abs(hashStr(title + duties + competencies))}`;
+    onCreate({
+      id,
+      title: title.trim(),
+      description: description.trim() || title.trim(),
+      duration: duration.trim() || '5 min',
+      duties: splitLines(duties),
+      competencies: splitLines(competencies),
+    });
+  };
+
+  return (
+    <div className="border border-indigo-200 bg-indigo-50/40 rounded-lg p-4 mb-3 space-y-3">
+      <div className="flex items-center justify-between">
+        <h3 className="font-medium text-sm text-slate-900">New custom module</h3>
+        <button onClick={onCancel} className="text-slate-400 hover:text-slate-600"><X className="h-4 w-4" /></button>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Module title" className="text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+        <input value={duration} onChange={e => setDuration(e.target.value)} placeholder="Duration (e.g. 6 min)" className="text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+      </div>
+      <input value={description} onChange={e => setDescription(e.target.value)} placeholder="Short description" className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+      <div>
+        <label className="text-xs text-slate-500 block mb-1">Duties unlocked (comma or line separated)</label>
+        <textarea value={duties} onChange={e => setDuties(e.target.value)} rows={2} placeholder="e.g. Bus loading support, Hallway transition support" className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+      </div>
+      <div>
+        <label className="text-xs text-slate-500 block mb-1">Observable competencies (comma or line separated)</label>
+        <textarea value={competencies} onChange={e => setCompetencies(e.target.value)} rows={2} placeholder="e.g. Demonstrates safe lifting technique, States district policy" className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+      </div>
+      <div className="flex items-center gap-2">
+        <Button onClick={create} disabled={!canCreate} size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-white">Add to library</Button>
+        <Button onClick={onCancel} variant="outline" size="sm">Cancel</Button>
       </div>
     </div>
   );

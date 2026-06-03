@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { BookOpen, ChevronLeft, CheckCircle, Lock, Unlock, Play, X, Clock, Users } from 'lucide-react';
 
 export default function ParaPage() {
-  const { paras, getParaCurriculum, moduleMap, toggleModuleComplete } = useStore();
+  const { paras, getParaCurriculum, moduleMap, submitForSignoff } = useStore();
   // Demo as a specific para; let the viewer switch who they are
   const [meId, setMeId] = useState('p5');
   const me = paras.find(p => p.id === meId)!;
@@ -18,7 +18,7 @@ export default function ParaPage() {
 
   const [activeModule, setActiveModule] = useState<Module | null>(null);
   const [watchedEnough, setWatchedEnough] = useState(false);
-  const [justUnlocked, setJustUnlocked] = useState<string[]>([]);
+  const [justSubmitted, setJustSubmitted] = useState<string | null>(null);
 
   if (!curriculum) {
     return (
@@ -28,15 +28,19 @@ export default function ParaPage() {
     );
   }
 
-  const completeModule = (mod: Module) => {
-    toggleModuleComplete(me.id, mod.id, true);
-    setJustUnlocked(mod.duties);
+  const submitModule = (mod: Module) => {
+    submitForSignoff(me.id, mod.id);
+    setJustSubmitted(mod.title);
     setActiveModule(null);
     setWatchedEnough(false);
-    setTimeout(() => setJustUnlocked([]), 5000);
+    setTimeout(() => setJustSubmitted(null), 6000);
   };
 
   const isCompleted = (moduleId: string) => me.progress.find(p => p.moduleId === moduleId)?.completed ?? false;
+  const isAwaiting = (moduleId: string) => {
+    const pr = me.progress.find(p => p.moduleId === moduleId);
+    return !!pr?.submittedForSignoff && !pr.completed;
+  };
 
   // A module is locked if earlier tiers in this curriculum aren't fully done
   const isLocked = (day: TrackDay): boolean => {
@@ -59,7 +63,7 @@ export default function ParaPage() {
         <div className="ml-auto flex items-center gap-2">
           {/* Demo affordance: switch which para you're viewing as */}
           <Users className="h-3.5 w-3.5 text-slate-400" />
-          <select value={meId} onChange={e => { setMeId(e.target.value); setJustUnlocked([]); }} className="text-sm border border-slate-200 rounded-lg px-2 py-1 bg-white">
+          <select value={meId} onChange={e => { setMeId(e.target.value); setJustSubmitted(null); }} className="text-sm border border-slate-200 rounded-lg px-2 py-1 bg-white">
             {paras.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
           </select>
         </div>
@@ -84,12 +88,12 @@ export default function ParaPage() {
           </div>
         </div>
 
-        {justUnlocked.length > 0 && (
-          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex items-start gap-3">
-            <Unlock className="h-5 w-5 text-emerald-600 mt-0.5 shrink-0" />
+        {justSubmitted && (
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-start gap-3">
+            <Clock className="h-5 w-5 text-blue-600 mt-0.5 shrink-0" />
             <div>
-              <p className="font-semibold text-emerald-800 text-sm">New duties unlocked!</p>
-              <p className="text-sm text-emerald-700 mt-0.5">You&apos;re now cleared for: {justUnlocked.join(', ')}</p>
+              <p className="font-semibold text-blue-800 text-sm">Submitted for supervisor sign-off</p>
+              <p className="text-sm text-blue-700 mt-0.5">&ldquo;{justSubmitted}&rdquo; is now awaiting your supervisor&apos;s review. Duties unlock once competency is confirmed.</p>
             </div>
           </div>
         )}
@@ -109,16 +113,18 @@ export default function ParaPage() {
                   const mod = moduleMap[cm.moduleId];
                   if (!mod) return null;
                   const done = isCompleted(cm.moduleId);
+                  const awaiting = isAwaiting(cm.moduleId);
                   return (
-                    <div key={cm.moduleId} className={`rounded-xl border p-4 ${done ? 'border-emerald-200 bg-emerald-50/50' : locked ? 'border-slate-200 bg-slate-50 opacity-60' : 'border-slate-200 bg-white'}`}>
+                    <div key={cm.moduleId} className={`rounded-xl border p-4 ${done ? 'border-emerald-200 bg-emerald-50/50' : awaiting ? 'border-blue-200 bg-blue-50/40' : locked ? 'border-slate-200 bg-slate-50 opacity-60' : 'border-slate-200 bg-white'}`}>
                       <div className="flex items-start gap-3">
-                        <div className={`h-9 w-9 rounded-lg flex items-center justify-center shrink-0 ${done ? 'bg-emerald-500' : locked ? 'bg-slate-200' : 'bg-indigo-100'}`}>
-                          {done ? <CheckCircle className="h-4 w-4 text-white" /> : locked ? <Lock className="h-4 w-4 text-slate-400" /> : <Play className="h-4 w-4 text-indigo-600" />}
+                        <div className={`h-9 w-9 rounded-lg flex items-center justify-center shrink-0 ${done ? 'bg-emerald-500' : awaiting ? 'bg-blue-100' : locked ? 'bg-slate-200' : 'bg-indigo-100'}`}>
+                          {done ? <CheckCircle className="h-4 w-4 text-white" /> : awaiting ? <Clock className="h-4 w-4 text-blue-600" /> : locked ? <Lock className="h-4 w-4 text-slate-400" /> : <Play className="h-4 w-4 text-indigo-600" />}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
                             <h3 className="font-medium text-sm text-slate-900">{mod.title}</h3>
                             <span className="flex items-center gap-1 text-xs text-slate-400"><Clock className="h-3 w-3" />{mod.duration}</span>
+                            {awaiting && <Badge className="bg-blue-100 text-blue-700 text-xs">Awaiting sign-off</Badge>}
                           </div>
                           <p className="text-sm text-slate-600 mt-1">{mod.description}</p>
                           <div className="flex flex-wrap gap-1.5 mt-2">
@@ -126,11 +132,12 @@ export default function ParaPage() {
                               <span key={d} className="text-xs text-slate-400 flex items-center gap-1"><Unlock className="h-2.5 w-2.5" />{d}</span>
                             ))}
                           </div>
-                          {!done && !locked && (
+                          {!done && !awaiting && !locked && (
                             <Button onClick={() => { setActiveModule(mod); setWatchedEnough(false); }} size="sm" className="mt-3 bg-indigo-600 hover:bg-indigo-700 text-white">
                               <Play className="h-3.5 w-3.5 mr-1" /> Start module
                             </Button>
                           )}
+                          {awaiting && <p className="text-xs text-blue-600 mt-2">Watched — your supervisor will confirm competency to unlock duties.</p>}
                           {locked && <p className="text-xs text-slate-400 mt-2 italic">Complete the previous track to unlock</p>}
                         </div>
                       </div>
@@ -165,13 +172,13 @@ export default function ParaPage() {
                 <input type="checkbox" checked={watchedEnough} onChange={e => setWatchedEnough(e.target.checked)} className="rounded" />
                 <span className="text-sm text-slate-700">I have watched this module and understand the protocol</span>
               </label>
-              <div className="bg-amber-50 border border-amber-100 rounded-lg p-3 mb-4">
-                <p className="text-xs text-amber-700">
-                  <span className="font-semibold">Supervisor sign-off required:</span> In production, a supervisor confirms demonstrated competency via tablet checklist before duties unlock. For this demo, marking complete unlocks duties directly.
+              <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 mb-4">
+                <p className="text-xs text-blue-700">
+                  <span className="font-semibold">Next step — supervisor sign-off:</span> Submitting sends this to your supervisor, who confirms demonstrated competency via an observation checklist. Duties unlock only after they sign off.
                 </p>
               </div>
-              <Button onClick={() => completeModule(activeModule)} disabled={!watchedEnough} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white disabled:bg-slate-200">
-                <CheckCircle className="h-4 w-4 mr-1.5" /> Mark complete & unlock duties
+              <Button onClick={() => submitModule(activeModule)} disabled={!watchedEnough} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white disabled:bg-slate-200">
+                <CheckCircle className="h-4 w-4 mr-1.5" /> Submit for supervisor sign-off
               </Button>
             </div>
           </div>

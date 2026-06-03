@@ -11,7 +11,8 @@ export default function Home() {
           <span className="font-semibold text-lg tracking-tight">ParaPath</span>
         </div>
         <div className="flex gap-2">
-          <Link href="/admin"><Button variant="outline" size="sm">Admin View</Button></Link>
+          <Link href="/admin"><Button variant="outline" size="sm">Admin</Button></Link>
+          <Link href="/supervisor"><Button variant="outline" size="sm">Supervisor</Button></Link>
           <Link href="/para"><Button size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-white">Para View</Button></Link>
         </div>
       </nav>

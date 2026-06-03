@@ -17,10 +17,13 @@ interface StoreContextType extends StoreState {
   saveCurriculum: (c: Curriculum) => void;
   deleteCurriculum: (id: string) => void;
   assignParaCurriculum: (paraId: string, curriculumId: string) => void;
-  toggleModuleComplete: (paraId: string, moduleId: string, done: boolean) => void;
+  submitForSignoff: (paraId: string, moduleId: string) => void;
+  signOff: (paraId: string, moduleId: string, supervisorName: string) => void;
   addModule: (m: Module) => void;
   resetDemo: () => void;
 }
+
+export const SUPERVISOR_NAME = 'Janet Mills';
 
 const StoreContext = createContext<StoreContextType | null>(null);
 
@@ -89,17 +92,38 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     }));
   }, []);
 
-  const toggleModuleComplete = useCallback((paraId: string, moduleId: string, done: boolean) => {
+  // Para attests they watched the module — enters the supervisor sign-off queue.
+  const submitForSignoff = useCallback((paraId: string, moduleId: string) => {
     const today = new Date().toISOString().slice(0, 10);
     setState(s => ({
       ...s,
       paras: s.paras.map(p => {
         if (p.id !== paraId) return p;
         const has = p.progress.some(pr => pr.moduleId === moduleId);
+        const entry = { moduleId, completed: false, submittedForSignoff: true, submittedDate: today };
         const progress = has
-          ? p.progress.map(pr => pr.moduleId === moduleId ? { ...pr, completed: done, completedDate: done ? today : undefined } : pr)
-          : [...p.progress, { moduleId, completed: done, completedDate: done ? today : undefined }];
+          ? p.progress.map(pr => pr.moduleId === moduleId ? { ...pr, ...entry } : pr)
+          : [...p.progress, entry];
         return { ...p, progress };
+      }),
+    }));
+  }, []);
+
+  // Supervisor confirms demonstrated competency — duties unlock.
+  const signOff = useCallback((paraId: string, moduleId: string, supervisorName: string) => {
+    const today = new Date().toISOString().slice(0, 10);
+    setState(s => ({
+      ...s,
+      paras: s.paras.map(p => {
+        if (p.id !== paraId) return p;
+        return {
+          ...p,
+          progress: p.progress.map(pr =>
+            pr.moduleId === moduleId
+              ? { ...pr, completed: true, completedDate: today, submittedForSignoff: false, signedOffBy: supervisorName }
+              : pr
+          ),
+        };
       }),
     }));
   }, []);
@@ -117,7 +141,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     <StoreContext.Provider value={{
       ...state, moduleMap, getCurriculum, getParaCurriculum,
       saveCurriculum, deleteCurriculum, assignParaCurriculum,
-      toggleModuleComplete, addModule, resetDemo,
+      submitForSignoff, signOff, addModule, resetDemo,
     }}>
       {children}
     </StoreContext.Provider>
@@ -176,6 +200,24 @@ export function getCompletionPct(para: Para, curriculum: Curriculum | undefined)
   if (!curriculum || curriculum.modules.length === 0) return 0;
   const done = curriculum.modules.filter(cm => para.progress.find(p => p.moduleId === cm.moduleId)?.completed).length;
   return Math.round((done / curriculum.modules.length) * 100);
+}
+
+export interface PendingSignoff {
+  para: Para;
+  moduleId: string;
+  submittedDate?: string;
+}
+
+export function getPendingSignoffs(paras: Para[]): PendingSignoff[] {
+  const out: PendingSignoff[] = [];
+  for (const para of paras) {
+    for (const pr of para.progress) {
+      if (pr.submittedForSignoff && !pr.completed) {
+        out.push({ para, moduleId: pr.moduleId, submittedDate: pr.submittedDate });
+      }
+    }
+  }
+  return out;
 }
 
 export function getCurrentTrack(para: Para, curriculum: Curriculum | undefined): string {

@@ -11,6 +11,11 @@ export const MODULE_LIBRARY: Module[] = [
     description: 'Recognize early warning signs and use non-confrontational language to prevent behavioral escalation in the classroom.',
     duration: '7 min',
     duties: ['Unsupervised 1:1 support', 'Behavioral observation logging'],
+    competencies: [
+      'Identifies at least three early escalation cues',
+      'Uses calm, non-confrontational tone during a role-play',
+      'Maintains safe physical positioning and personal space',
+    ],
   },
   {
     id: 'm2',
@@ -18,6 +23,11 @@ export const MODULE_LIBRARY: Module[] = [
     description: 'Abdominal thrusts, back blows, and when to call 911. Required before any food-service or lunchroom duty.',
     duration: '5 min',
     duties: ['Lunchroom supervision', 'Food service support'],
+    competencies: [
+      'Demonstrates abdominal thrusts correctly on a manikin',
+      'Distinguishes a partial from a complete airway obstruction',
+      'States the correct point to activate 911',
+    ],
   },
   {
     id: 'm3',
@@ -25,6 +35,11 @@ export const MODULE_LIBRARY: Module[] = [
     description: 'What to do (and not do) during a seizure event, timing, positioning, and documentation requirements.',
     duration: '6 min',
     duties: ['Medication administration support', 'Health aide coverage'],
+    competencies: [
+      'Positions student safely and times the seizure',
+      'States when emergency services are required',
+      'Completes the post-event documentation form',
+    ],
   },
   {
     id: 'm4',
@@ -32,6 +47,11 @@ export const MODULE_LIBRARY: Module[] = [
     description: 'Evidence-based strategies for supporting students on the autism spectrum: structured routines, sensory accommodations, AAC basics.',
     duration: '9 min',
     duties: ['ASD classroom assignment', 'AAC device support'],
+    competencies: [
+      'Implements a visual schedule with a student',
+      'Identifies sensory triggers and appropriate accommodations',
+      'Models a communication exchange using AAC',
+    ],
   },
   {
     id: 'm5',
@@ -39,6 +59,11 @@ export const MODULE_LIBRARY: Module[] = [
     description: 'Understanding LRE, inclusive practices, and how paras support inclusion without creating dependence.',
     duration: '8 min',
     duties: ['General ed inclusion support', 'Co-teaching assistance'],
+    competencies: [
+      'Explains the LRE principle in plain language',
+      'Fades prompting to promote student independence',
+      'Coordinates support with the general ed teacher',
+    ],
   },
   {
     id: 'm6',
@@ -46,6 +71,11 @@ export const MODULE_LIBRARY: Module[] = [
     description: 'What student information you can and cannot share, with whom, and how to handle sensitive records.',
     duration: '5 min',
     duties: ['IEP meeting attendance', 'Progress note access'],
+    competencies: [
+      'Identifies what information may be shared and with whom',
+      'Handles and stores records per district policy',
+      'Recognizes a FERPA disclosure violation in a scenario',
+    ],
   },
   {
     id: 'm7',
@@ -53,6 +83,11 @@ export const MODULE_LIBRARY: Module[] = [
     description: 'Function-based thinking, antecedent strategies, and reinforcement systems aligned to behavior intervention plans.',
     duration: '10 min',
     duties: ['Behavior support plan implementation', 'Data collection primary'],
+    competencies: [
+      'Identifies the likely function of a target behavior',
+      'Applies an antecedent strategy from a BIP',
+      'Records behavior data accurately on the tracking form',
+    ],
   },
   {
     id: 'm8',
@@ -60,6 +95,11 @@ export const MODULE_LIBRARY: Module[] = [
     description: 'When physical intervention is appropriate, restraint policies, documentation, and incident reporting.',
     duration: '8 min',
     duties: ['Crisis response team support', 'Restraint documentation'],
+    competencies: [
+      'States the district threshold for physical intervention',
+      'Identifies prohibited restraint positions',
+      'Completes an incident report with required fields',
+    ],
   },
   {
     id: 'm9',
@@ -67,6 +107,11 @@ export const MODULE_LIBRARY: Module[] = [
     description: 'Supporting students with dysphagia: positioning, pacing, texture modification, and recognizing aspiration risk.',
     duration: '7 min',
     duties: ['Feeding assistance', 'Mealtime supervision (medical)'],
+    competencies: [
+      'Positions a student correctly for safe swallowing',
+      'Recognizes the signs of aspiration',
+      'Follows the prescribed texture-modification plan',
+    ],
   },
   {
     id: 'm10',
@@ -74,6 +119,11 @@ export const MODULE_LIBRARY: Module[] = [
     description: 'Operating augmentative and alternative communication devices and modeling their use throughout the day.',
     duration: '9 min',
     duties: ['AAC device support', 'Communication partner role'],
+    competencies: [
+      'Powers on and navigates the student’s AAC device',
+      'Models device use during a natural interaction',
+      'Troubleshoots a common device issue',
+    ],
   },
 ];
 
@@ -154,9 +204,9 @@ export const SEED_PARAS: Para[] = [
       { moduleId: 'm1', completed: true, completedDate: daysAgo(42) },
       { moduleId: 'm2', completed: true, completedDate: daysAgo(41) },
       { moduleId: 'm3', completed: true, completedDate: daysAgo(38) },
-      { moduleId: 'm4', completed: true, completedDate: daysAgo(15) },
-      { moduleId: 'm5', completed: true, completedDate: daysAgo(13) },
-      { moduleId: 'm6', completed: false },
+      { moduleId: 'm4', completed: true, completedDate: daysAgo(15), signedOffBy: 'Janet Mills' },
+      { moduleId: 'm5', completed: true, completedDate: daysAgo(13), signedOffBy: 'Janet Mills' },
+      { moduleId: 'm6', completed: false, submittedForSignoff: true, submittedDate: daysAgo(3) },
       { moduleId: 'm7', completed: false },
       { moduleId: 'm8', completed: false },
     ],
@@ -218,10 +268,10 @@ export const SEED_PARAS: Para[] = [
     avatar: 'CT',
     curriculumId: 'cur_core',
     progress: [
-      { moduleId: 'm1', completed: true, completedDate: daysAgo(20) },
-      { moduleId: 'm2', completed: true, completedDate: daysAgo(19) },
-      { moduleId: 'm3', completed: true, completedDate: daysAgo(15) },
-      { moduleId: 'm4', completed: false },
+      { moduleId: 'm1', completed: true, completedDate: daysAgo(20), signedOffBy: 'Janet Mills' },
+      { moduleId: 'm2', completed: true, completedDate: daysAgo(19), signedOffBy: 'Janet Mills' },
+      { moduleId: 'm3', completed: true, completedDate: daysAgo(15), signedOffBy: 'Janet Mills' },
+      { moduleId: 'm4', completed: false, submittedForSignoff: true, submittedDate: daysAgo(2) },
       { moduleId: 'm5', completed: false },
       { moduleId: 'm6', completed: false },
       { moduleId: 'm7', completed: false },
