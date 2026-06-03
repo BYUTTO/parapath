@@ -1,65 +1,70 @@
-import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { BookOpen, LayoutDashboard, CheckSquare, Unlock } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="min-h-screen flex flex-col">
+      <nav className="border-b bg-white px-6 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <BookOpen className="h-5 w-5 text-indigo-600" />
+          <span className="font-semibold text-lg tracking-tight">ParaPath</span>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="flex gap-2">
+          <Link href="/admin"><Button variant="outline" size="sm">Admin View</Button></Link>
+          <Link href="/para"><Button size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-white">Para View</Button></Link>
         </div>
-      </main>
+      </nav>
+
+      <section className="flex-1 flex flex-col items-center justify-center px-6 py-24 text-center">
+        <div className="inline-flex items-center gap-2 rounded-full bg-indigo-50 px-4 py-1.5 text-sm font-medium text-indigo-700 mb-6">
+          BYU Technology Transfer Office
+        </div>
+        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl mb-6 max-w-2xl">
+          Job-embedded training for paraprofessionals —{" "}
+          <span className="text-indigo-600">with duties unlocked as competency is proven.</span>
+        </h1>
+        <p className="text-lg text-slate-600 mb-8 max-w-xl">
+          46% of paraprofessionals report dissatisfaction with one-time training events. ParaPath
+          replaces them with 5–10 minute scenario-based modules on a 30/60/90-day track, with
+          duties unlocking only after demonstrated competency.
+        </p>
+        <div className="flex gap-3 flex-wrap justify-center">
+          <Link href="/admin">
+            <Button size="lg" variant="outline">See admin dashboard →</Button>
+          </Link>
+          <Link href="/para">
+            <Button size="lg" className="bg-indigo-600 hover:bg-indigo-700 text-white">See para experience →</Button>
+          </Link>
+        </div>
+      </section>
+
+      <section className="border-t bg-white px-6 py-16">
+        <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-8">
+          <Feature icon={<BookOpen className="h-5 w-5 text-indigo-600" />} title="5–10 minute scenario modules" description="Evidence-based video scenarios: de-escalation, first aid, autism support, FERPA, PBS. Designed for on-the-job completion between duties." />
+          <Feature icon={<Unlock className="h-5 w-5 text-emerald-600" />} title="Duty-unlock track" description="Paras can't be assigned lunchroom supervision until they complete the choking module. Duties unlock automatically on the 30/60/90-day track." />
+          <Feature icon={<LayoutDashboard className="h-5 w-5 text-amber-500" />} title="Supervisor dashboard" description="Special ed directors see every para's completion status, overdue flags, and cleared duties across the whole district — in one screen." />
+          <Feature icon={<CheckSquare className="h-5 w-5 text-slate-600" />} title="Compliance tracking" description="Automated overdue flags at 30, 60, and 90 days. No more chasing sign-in sheets or spreadsheets — the system surfaces noncompliance before an incident." />
+        </div>
+      </section>
+
+      <section className="px-6 py-8 border-t text-center">
+        <p className="text-sm text-slate-500 max-w-lg mx-auto">
+          Built on peer-reviewed research documenting that one-time training events fail to produce lasting competency gains in paraprofessionals serving students with disabilities.
+        </p>
+      </section>
+    </main>
+  );
+}
+
+function Feature({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) {
+  return (
+    <div className="flex gap-4">
+      <div className="mt-0.5 shrink-0">{icon}</div>
+      <div>
+        <h3 className="font-semibold mb-1">{title}</h3>
+        <p className="text-sm text-slate-600">{description}</p>
+      </div>
     </div>
   );
 }
