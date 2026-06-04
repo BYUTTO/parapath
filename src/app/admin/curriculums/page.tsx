@@ -32,14 +32,14 @@ export default function CurriculumsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <nav className="border-b bg-white px-6 py-3 flex items-center gap-3">
-        <Link href="/admin" className="text-slate-400 hover:text-slate-700 transition-colors"><ChevronLeft className="h-4 w-4" /></Link>
-        <BookOpen className="h-4 w-4 text-indigo-600" />
-        <span className="font-semibold text-sm">ParaPath</span>
-        <span className="text-slate-300">/</span>
-        <span className="text-sm text-slate-500">Curriculums</span>
-        <button onClick={resetDemo} className="ml-auto flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-700 transition-colors" title="Reset demo data">
+    <div className="min-h-screen bg-paper">
+      <nav className="border-b bg-card px-6 py-3 flex items-center gap-3">
+        <Link href="/admin" className="text-inkfaint hover:text-ink transition-colors"><ChevronLeft className="h-4 w-4" /></Link>
+        <BookOpen className="h-4 w-4 text-accent" />
+        <span className="font-display font-semibold text-[15px] tracking-tight">ParaPath</span>
+        <span className="text-inkfaint">/</span>
+        <span className="text-sm text-inkmute">Curriculums</span>
+        <button onClick={resetDemo} className="ml-auto flex items-center gap-1.5 text-xs text-inkfaint hover:text-ink transition-colors" title="Reset demo data">
           <RotateCcw className="h-3.5 w-3.5" /> Reset demo
         </button>
       </nav>
@@ -47,10 +47,10 @@ export default function CurriculumsPage() {
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-xl font-bold text-slate-900">Curriculums</h1>
-            <p className="text-sm text-slate-500 mt-0.5">Build training paths from the module library and assign them to roles.</p>
+            <h1 className="text-xl font-bold text-ink">Curriculums</h1>
+            <p className="text-sm text-inkmute mt-0.5">Build training paths from the module library and assign them to roles.</p>
           </div>
-          <Button onClick={() => setCreating(true)} className="bg-indigo-600 hover:bg-indigo-700 text-white gap-1.5">
+          <Button onClick={() => setCreating(true)} className="bg-accent hover:bg-accent-hover text-white gap-1.5">
             <Plus className="h-4 w-4" /> New curriculum
           </Button>
         </div>
@@ -60,20 +60,20 @@ export default function CurriculumsPage() {
             const assigned = paras.filter(p => p.curriculumId === c.id).length;
             const totalMin = c.modules.reduce((sum, cm) => sum + parseInt(modules.find(m => m.id === cm.moduleId)?.duration ?? '0'), 0);
             return (
-              <div key={c.id} className="bg-white rounded-xl border border-slate-200 p-5 flex flex-col">
+              <div key={c.id} className="bg-card rounded-xl border border-line p-5 flex flex-col">
                 <div className="flex items-start justify-between gap-2 mb-2">
-                  <h3 className="font-semibold text-slate-900">{c.name}</h3>
+                  <h3 className="font-semibold text-ink">{c.name}</h3>
                   <div className="flex gap-1 shrink-0">
-                    <button onClick={() => setEditing(c)} className="text-slate-400 hover:text-indigo-600 p-1"><Pencil className="h-3.5 w-3.5" /></button>
-                    <button onClick={() => { if (confirm(`Delete "${c.name}"?`)) deleteCurriculum(c.id); }} className="text-slate-400 hover:text-red-600 p-1"><Trash2 className="h-3.5 w-3.5" /></button>
+                    <button onClick={() => setEditing(c)} className="text-inkfaint hover:text-accent p-1"><Pencil className="h-3.5 w-3.5" /></button>
+                    <button onClick={() => { if (confirm(`Delete "${c.name}"?`)) deleteCurriculum(c.id); }} className="text-inkfaint hover:text-fail p-1"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                 </div>
-                <p className="text-sm text-slate-600 mb-3 flex-1">{c.description}</p>
+                <p className="text-sm text-inkmute mb-3 flex-1">{c.description}</p>
                 <div className="flex flex-wrap gap-1.5 mb-3">
-                  {c.appliesToRoles.map(r => <Badge key={r} variant="outline" className="text-xs bg-indigo-50 text-indigo-700 border-indigo-200">{r}</Badge>)}
-                  {c.appliesToRoles.length === 0 && <span className="text-xs text-slate-400 italic">No roles assigned</span>}
+                  {c.appliesToRoles.map(r => <Badge key={r} variant="outline" className="text-xs bg-accent/10 text-accent border-accent/30">{r}</Badge>)}
+                  {c.appliesToRoles.length === 0 && <span className="text-xs text-inkfaint italic">No roles assigned</span>}
                 </div>
-                <div className="flex items-center gap-4 text-xs text-slate-500 border-t pt-3">
+                <div className="flex items-center gap-4 text-xs text-inkmute border-t pt-3">
                   <span className="flex items-center gap-1"><BookOpen className="h-3 w-3" />{c.modules.length} modules</span>
                   <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{totalMin} min</span>
                   <span className="flex items-center gap-1"><Users className="h-3 w-3" />{assigned} paras</span>
@@ -111,31 +111,31 @@ function CurriculumEditor({ initial, onCancel, onSave }: { initial: Curriculum; 
   const canSave = name.trim().length > 0 && picked.length > 0;
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <nav className="border-b bg-white px-6 py-3 flex items-center gap-3">
-        <button onClick={onCancel} className="text-slate-400 hover:text-slate-700 transition-colors"><ChevronLeft className="h-4 w-4" /></button>
-        <BookOpen className="h-4 w-4 text-indigo-600" />
-        <span className="font-semibold text-sm">ParaPath</span>
-        <span className="text-slate-300">/</span>
-        <span className="text-sm text-slate-500">{initial.name ? 'Edit Curriculum' : 'New Curriculum'}</span>
+    <div className="min-h-screen bg-paper">
+      <nav className="border-b bg-card px-6 py-3 flex items-center gap-3">
+        <button onClick={onCancel} className="text-inkfaint hover:text-ink transition-colors"><ChevronLeft className="h-4 w-4" /></button>
+        <BookOpen className="h-4 w-4 text-accent" />
+        <span className="font-display font-semibold text-[15px] tracking-tight">ParaPath</span>
+        <span className="text-inkfaint">/</span>
+        <span className="text-sm text-inkmute">{initial.name ? 'Edit Curriculum' : 'New Curriculum'}</span>
       </nav>
 
       <div className="max-w-3xl mx-auto px-4 py-8 space-y-6">
         {/* Basics */}
-        <div className="bg-white rounded-xl border border-slate-200 p-5 space-y-4">
+        <div className="bg-card rounded-xl border border-line p-5 space-y-4">
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">Curriculum name</label>
-            <input value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Health Aide Track" className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+            <label className="block text-xs font-medium text-inkmute mb-1">Curriculum name</label>
+            <input value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Health Aide Track" className="w-full border border-line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent" />
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-1">Description</label>
-            <textarea value={description} onChange={e => setDescription(e.target.value)} rows={2} placeholder="Who is this path for and what does it cover?" className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+            <label className="block text-xs font-medium text-inkmute mb-1">Description</label>
+            <textarea value={description} onChange={e => setDescription(e.target.value)} rows={2} placeholder="Who is this path for and what does it cover?" className="w-full border border-line rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-accent" />
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-600 mb-2">Auto-assign to roles</label>
+            <label className="block text-xs font-medium text-inkmute mb-2">Auto-assign to roles</label>
             <div className="flex flex-wrap gap-2">
               {PARA_ROLES.map(r => (
-                <button key={r} onClick={() => toggleRole(r)} className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${roles.includes(r) ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300'}`}>
+                <button key={r} onClick={() => toggleRole(r)} className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${roles.includes(r) ? 'bg-accent text-white border-accent' : 'bg-card text-inkmute border-line hover:border-accent/40'}`}>
                   {r}
                 </button>
               ))}
@@ -144,16 +144,16 @@ function CurriculumEditor({ initial, onCancel, onSave }: { initial: Curriculum; 
         </div>
 
         {/* Module picker */}
-        <div className="bg-white rounded-xl border border-slate-200 p-5">
+        <div className="bg-card rounded-xl border border-line p-5">
           <div className="flex items-center justify-between mb-1">
-            <h2 className="font-semibold text-slate-900">Modules</h2>
-            <span className="text-xs text-slate-400">{picked.length} selected</span>
+            <h2 className="font-semibold text-ink">Modules</h2>
+            <span className="text-xs text-inkfaint">{picked.length} selected</span>
           </div>
-          <p className="text-sm text-slate-500 mb-4">Toggle modules into this curriculum and set which track day each belongs to.</p>
+          <p className="text-sm text-inkmute mb-4">Toggle modules into this curriculum and set which track day each belongs to.</p>
 
           {showNewModule
             ? <NewModuleForm onCancel={() => setShowNewModule(false)} onCreate={(m) => { addModule(m); setPicked(prev => [...prev, { moduleId: m.id, day: 30 }]); setShowNewModule(false); }} />
-            : <button onClick={() => setShowNewModule(true)} className="w-full mb-3 flex items-center justify-center gap-1.5 text-sm text-indigo-600 border border-dashed border-indigo-200 rounded-lg py-2 hover:bg-indigo-50 transition-colors">
+            : <button onClick={() => setShowNewModule(true)} className="w-full mb-3 flex items-center justify-center gap-1.5 text-sm text-accent border border-dashed border-accent/30 rounded-lg py-2 hover:bg-accent/10 transition-colors">
                 <Plus className="h-3.5 w-3.5" /> Create a custom module
               </button>
           }
@@ -162,25 +162,25 @@ function CurriculumEditor({ initial, onCancel, onSave }: { initial: Curriculum; 
             {modules.map(mod => {
               const included = isIncluded(mod.id);
               return (
-                <div key={mod.id} className={`rounded-lg border p-3 transition-colors ${included ? 'border-indigo-200 bg-indigo-50/40' : 'border-slate-200'}`}>
+                <div key={mod.id} className={`rounded-lg border p-3 transition-colors ${included ? 'border-accent/30 bg-accent/8' : 'border-line'}`}>
                   <div className="flex items-start gap-3">
-                    <button onClick={() => toggleModule(mod.id)} className={`mt-0.5 h-5 w-5 rounded border flex items-center justify-center shrink-0 ${included ? 'bg-indigo-600 border-indigo-600' : 'border-slate-300 bg-white'}`}>
+                    <button onClick={() => toggleModule(mod.id)} className={`mt-0.5 h-5 w-5 rounded border flex items-center justify-center shrink-0 ${included ? 'bg-accent border-accent' : 'border-line bg-card'}`}>
                       {included && <svg className="h-3 w-3 text-white" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
                     </button>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-sm font-medium text-slate-900">{mod.title}</span>
-                        <span className="flex items-center gap-1 text-xs text-slate-400"><Clock className="h-3 w-3" />{mod.duration}</span>
+                        <span className="text-sm font-medium text-ink">{mod.title}</span>
+                        <span className="flex items-center gap-1 text-xs text-inkfaint"><Clock className="h-3 w-3" />{mod.duration}</span>
                       </div>
-                      <p className="text-xs text-slate-500 mt-0.5 line-clamp-1">{mod.description}</p>
+                      <p className="text-xs text-inkmute mt-0.5 line-clamp-1">{mod.description}</p>
                       <div className="flex flex-wrap gap-1 mt-1">
-                        {mod.duties.map(d => <span key={d} className="text-xs text-slate-400">· {d}</span>)}
+                        {mod.duties.map(d => <span key={d} className="text-xs text-inkfaint">· {d}</span>)}
                       </div>
                     </div>
                     {included && (
                       <div className="shrink-0">
-                        <label className="text-xs text-slate-400 block mb-0.5">Track</label>
-                        <select value={dayOf(mod.id)} onChange={e => setDay(mod.id, Number(e.target.value) as TrackDay)} className="text-xs border border-slate-200 rounded px-1.5 py-1 bg-white">
+                        <label className="text-xs text-inkfaint block mb-0.5">Track</label>
+                        <select value={dayOf(mod.id)} onChange={e => setDay(mod.id, Number(e.target.value) as TrackDay)} className="text-xs border border-line rounded px-1.5 py-1 bg-card">
                           <option value={30}>30-day</option>
                           <option value={60}>60-day</option>
                           <option value={90}>90-day</option>
@@ -196,15 +196,15 @@ function CurriculumEditor({ initial, onCancel, onSave }: { initial: Curriculum; 
 
         {/* Track preview */}
         {picked.length > 0 && (
-          <div className="bg-white rounded-xl border border-slate-200 p-5">
-            <h2 className="font-semibold text-slate-900 mb-3">Track preview</h2>
+          <div className="bg-card rounded-xl border border-line p-5">
+            <h2 className="font-semibold text-ink mb-3">Track preview</h2>
             <div className="space-y-3">
               {([30, 60, 90] as TrackDay[]).map(day => {
                 const inDay = picked.filter(p => p.day === day);
                 if (inDay.length === 0) return null;
                 return (
                   <div key={day}>
-                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">{day}-Day Track</p>
+                    <p className="text-xs font-semibold text-inkmute uppercase tracking-wide mb-1.5">{day}-Day Track</p>
                     <div className="flex flex-wrap gap-1.5">
                       {inDay.map(p => {
                         const mod = modules.find(m => m.id === p.moduleId);
@@ -220,11 +220,11 @@ function CurriculumEditor({ initial, onCancel, onSave }: { initial: Curriculum; 
 
         {/* Actions */}
         <div className="flex items-center gap-3">
-          <Button onClick={() => onSave({ ...initial, name: name.trim(), description: description.trim(), appliesToRoles: roles, modules: picked })} disabled={!canSave} className="bg-indigo-600 hover:bg-indigo-700 text-white">
+          <Button onClick={() => onSave({ ...initial, name: name.trim(), description: description.trim(), appliesToRoles: roles, modules: picked })} disabled={!canSave} className="bg-accent hover:bg-accent-hover text-white">
             Save curriculum
           </Button>
           <Button onClick={onCancel} variant="outline">Cancel</Button>
-          {!canSave && <span className="text-xs text-slate-400">Name and at least one module required</span>}
+          {!canSave && <span className="text-xs text-inkfaint">Name and at least one module required</span>}
         </div>
       </div>
     </div>
@@ -254,26 +254,26 @@ function NewModuleForm({ onCancel, onCreate }: { onCancel: () => void; onCreate:
   };
 
   return (
-    <div className="border border-indigo-200 bg-indigo-50/40 rounded-lg p-4 mb-3 space-y-3">
+    <div className="border border-accent/30 bg-accent/8 rounded-lg p-4 mb-3 space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="font-medium text-sm text-slate-900">New custom module</h3>
-        <button onClick={onCancel} className="text-slate-400 hover:text-slate-600"><X className="h-4 w-4" /></button>
+        <h3 className="font-medium text-sm text-ink">New custom module</h3>
+        <button onClick={onCancel} className="text-inkfaint hover:text-inkmute"><X className="h-4 w-4" /></button>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Module title" className="text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
-        <input value={duration} onChange={e => setDuration(e.target.value)} placeholder="Duration (e.g. 6 min)" className="text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+        <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Module title" className="text-sm border border-line rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent" />
+        <input value={duration} onChange={e => setDuration(e.target.value)} placeholder="Duration (e.g. 6 min)" className="text-sm border border-line rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent" />
       </div>
-      <input value={description} onChange={e => setDescription(e.target.value)} placeholder="Short description" className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+      <input value={description} onChange={e => setDescription(e.target.value)} placeholder="Short description" className="w-full text-sm border border-line rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent" />
       <div>
-        <label className="text-xs text-slate-500 block mb-1">Duties unlocked (comma or line separated)</label>
-        <textarea value={duties} onChange={e => setDuties(e.target.value)} rows={2} placeholder="e.g. Bus loading support, Hallway transition support" className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+        <label className="text-xs text-inkmute block mb-1">Duties unlocked (comma or line separated)</label>
+        <textarea value={duties} onChange={e => setDuties(e.target.value)} rows={2} placeholder="e.g. Bus loading support, Hallway transition support" className="w-full text-sm border border-line rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-accent" />
       </div>
       <div>
-        <label className="text-xs text-slate-500 block mb-1">Observable competencies (comma or line separated)</label>
-        <textarea value={competencies} onChange={e => setCompetencies(e.target.value)} rows={2} placeholder="e.g. Demonstrates safe lifting technique, States district policy" className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400" />
+        <label className="text-xs text-inkmute block mb-1">Observable competencies (comma or line separated)</label>
+        <textarea value={competencies} onChange={e => setCompetencies(e.target.value)} rows={2} placeholder="e.g. Demonstrates safe lifting technique, States district policy" className="w-full text-sm border border-line rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-accent" />
       </div>
       <div className="flex items-center gap-2">
-        <Button onClick={create} disabled={!canCreate} size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-white">Add to library</Button>
+        <Button onClick={create} disabled={!canCreate} size="sm" className="bg-accent hover:bg-accent-hover text-white">Add to library</Button>
         <Button onClick={onCancel} variant="outline" size="sm">Cancel</Button>
       </div>
     </div>

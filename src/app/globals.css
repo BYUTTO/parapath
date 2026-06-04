@@ -4,18 +4,51 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@media print {
-  .print\:hidden { display: none !important; }
-  .print\:border-0 { border: 0 !important; }
-  body { background: white !important; }
+/* ── ParaPath design language: "Growth / Field Guide" ──
+   soft cream paper, warm ink, deep pine-green growth accent, warm amber
+   duty-unlock highlight, Bricolage Grotesque display + Figtree body,
+   friendly rounding. Encouraging and grounded — a training journey, not a
+   corporate-AI dashboard. */
+@theme {
+  --color-paper: #faf7f0;
+  --color-card: #ffffff;
+  --color-ink: #262420;
+  --color-inkmute: #6b665c;
+  --color-inkfaint: #9e978a;
+  --color-line: #eae3d6;
+
+  --color-accent: #1f6b47;
+  --color-accent-hover: #18583b;
+  --color-accent-fg: #f4fbf6;
+
+  /* warm amber — progress + duty-unlock celebration moments */
+  --color-amber: #c9871f;
+  --color-amberbg: #f9efdb;
+
+  /* pass / complete */
+  --color-pass: #2f855a;
+  --color-passbg: #e6f2ea;
+  /* overdue / alert — keep "danger", warm red */
+  --color-fail: #c0573f;
+  --color-failbg: #f6e7e1;
+  /* warn — amber */
+  --color-warn: #b7791f;
+  --color-warnbg: #f6ecd6;
+  /* info / in-progress — calm slate-blue, distinct from brand + pass */
+  --color-info: #3f6f9c;
+  --color-infobg: #e7eef5;
+
+  --font-display: var(--font-display), "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-sans), "Figtree", ui-sans-serif, system-ui, sans-serif;
 }
 
+/* shadcn token bridge — remapped to the Field Guide palette so
+   Button/Badge/Progress stay coherent (primary → pine green, background → cream) */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-heading: var(--font-display);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -55,72 +88,83 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --background: #faf7f0;
+  --foreground: #262420;
+  --card: #ffffff;
+  --card-foreground: #262420;
+  --popover: #ffffff;
+  --popover-foreground: #262420;
+  --primary: #1f6b47;
+  --primary-foreground: #f4fbf6;
+  --secondary: #f1ece1;
+  --secondary-foreground: #262420;
+  --muted: #f1ece1;
+  --muted-foreground: #6b665c;
+  --accent: #f1ece1;
+  --accent-foreground: #262420;
+  --destructive: #c0573f;
+  --border: #eae3d6;
+  --input: #eae3d6;
+  --ring: #1f6b47;
+  --chart-1: #1f6b47;
+  --chart-2: #c9871f;
+  --chart-3: #3f6f9c;
+  --chart-4: #2f855a;
+  --chart-5: #c0573f;
+  --radius: 0.75rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #262420;
+  --sidebar-primary: #1f6b47;
+  --sidebar-primary-foreground: #f4fbf6;
+  --sidebar-accent: #f1ece1;
+  --sidebar-accent-foreground: #262420;
+  --sidebar-border: #eae3d6;
+  --sidebar-ring: #1f6b47;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: #1b1a16;
+  --foreground: #f4f1e9;
+  --card: #232019;
+  --card-foreground: #f4f1e9;
+  --popover: #232019;
+  --popover-foreground: #f4f1e9;
+  --primary: #4aa379;
+  --primary-foreground: #10241a;
+  --secondary: #2c281f;
+  --secondary-foreground: #f4f1e9;
+  --muted: #2c281f;
+  --muted-foreground: #b3ab9a;
+  --accent: #2c281f;
+  --accent-foreground: #f4f1e9;
+  --destructive: #d57a64;
+  --border: rgba(244, 241, 233, 0.12);
+  --input: rgba(244, 241, 233, 0.15);
+  --ring: #4aa379;
+  --chart-1: #4aa379;
+  --chart-2: #d9a23f;
+  --chart-3: #6f9cc4;
+  --chart-4: #4aa379;
+  --chart-5: #d57a64;
+  --sidebar: #232019;
+  --sidebar-foreground: #f4f1e9;
+  --sidebar-primary: #4aa379;
+  --sidebar-primary-foreground: #10241a;
+  --sidebar-accent: #2c281f;
+  --sidebar-accent-foreground: #f4f1e9;
+  --sidebar-border: rgba(244, 241, 233, 0.12);
+  --sidebar-ring: #4aa379;
+}
+
+@media print {
+  .print\:hidden { display: none !important; }
+  .print\:border-0 { border: 0 !important; }
+  .print\:p-0 { padding: 0 !important; }
+  .print\:mb-6 { margin-bottom: 1.5rem !important; }
+  .print\:mt-8 { margin-top: 2rem !important; }
+  .print\:bg-white { background: #ffffff !important; }
+  /* compliance report prints as clean ink-on-paper */
+  body { background: #ffffff !important; background-image: none !important; color: #262420 !important; }
 }
 
 @layer base {
@@ -128,9 +172,15 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
   }
   html {
     @apply font-sans;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
   }
 }

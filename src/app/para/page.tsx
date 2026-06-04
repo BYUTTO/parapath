@@ -22,8 +22,8 @@ export default function ParaPage() {
 
   if (!curriculum) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-slate-500">
-        No curriculum assigned. <Link href="/admin/curriculums" className="text-indigo-600 ml-1 underline">Assign one →</Link>
+      <div className="min-h-screen flex items-center justify-center text-inkmute">
+        No curriculum assigned. <Link href="/admin/curriculums" className="text-accent ml-1 underline">Assign one →</Link>
       </div>
     );
   }
@@ -55,45 +55,45 @@ export default function ParaPage() {
   const tracksWithModules = tracks.filter(day => curriculum.modules.some(m => m.day === day));
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <nav className="border-b bg-white px-6 py-3 flex items-center gap-3">
-        <Link href="/" className="text-slate-400 hover:text-slate-700 transition-colors"><ChevronLeft className="h-4 w-4" /></Link>
-        <BookOpen className="h-4 w-4 text-indigo-600" />
-        <span className="font-semibold text-sm">ParaPath</span>
+    <div className="min-h-screen bg-paper">
+      <nav className="border-b bg-card px-6 py-3 flex items-center gap-3">
+        <Link href="/" className="text-inkfaint hover:text-ink transition-colors"><ChevronLeft className="h-4 w-4" /></Link>
+        <BookOpen className="h-4 w-4 text-accent" />
+        <span className="font-display font-semibold text-[15px] tracking-tight">ParaPath</span>
         <div className="ml-auto flex items-center gap-2">
           {/* Demo affordance: switch which para you're viewing as */}
-          <Users className="h-3.5 w-3.5 text-slate-400" />
-          <select value={meId} onChange={e => { setMeId(e.target.value); setJustSubmitted(null); }} className="text-sm border border-slate-200 rounded-lg px-2 py-1 bg-white">
+          <Users className="h-3.5 w-3.5 text-inkfaint" />
+          <select value={meId} onChange={e => { setMeId(e.target.value); setJustSubmitted(null); }} className="text-sm border border-line rounded-lg px-2 py-1 bg-card">
             {paras.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
           </select>
         </div>
       </nav>
 
       <div className="max-w-2xl mx-auto px-4 py-8 space-y-6">
-        <div className="bg-white rounded-xl border border-slate-200 p-5">
+        <div className="bg-card rounded-xl border border-line p-5">
           <div className="flex items-center justify-between mb-3">
             <div>
-              <h1 className="font-semibold text-slate-900">My Training Path</h1>
-              <p className="text-sm text-slate-500">{me.role} · {curriculum.name}</p>
+              <h1 className="font-semibold text-ink">My Training Path</h1>
+              <p className="text-sm text-inkmute">{me.role} · {curriculum.name}</p>
             </div>
             <div className="text-right">
-              <p className="text-2xl font-bold text-indigo-600">{pct}%</p>
-              <p className="text-xs text-slate-400">{me.progress.filter(p => p.completed).length} of {curriculum.modules.length} modules</p>
+              <p className="text-2xl font-bold text-accent">{pct}%</p>
+              <p className="text-xs text-inkfaint">{me.progress.filter(p => p.completed).length} of {curriculum.modules.length} modules</p>
             </div>
           </div>
           <Progress value={pct} className="h-2" />
-          <div className="flex items-center gap-1.5 mt-3 text-sm text-emerald-700">
+          <div className="flex items-center gap-1.5 mt-3 text-sm text-amber">
             <Unlock className="h-3.5 w-3.5" />
             <span className="font-medium">{unlockedDuties.length} duties cleared</span>
           </div>
         </div>
 
         {justSubmitted && (
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-start gap-3">
-            <Clock className="h-5 w-5 text-blue-600 mt-0.5 shrink-0" />
+          <div className="bg-infobg border border-info/30 rounded-xl p-4 flex items-start gap-3">
+            <Clock className="h-5 w-5 text-info mt-0.5 shrink-0" />
             <div>
-              <p className="font-semibold text-blue-800 text-sm">Submitted for supervisor sign-off</p>
-              <p className="text-sm text-blue-700 mt-0.5">&ldquo;{justSubmitted}&rdquo; is now awaiting your supervisor&apos;s review. Duties unlock once competency is confirmed.</p>
+              <p className="font-semibold text-info text-sm">Submitted for supervisor sign-off</p>
+              <p className="text-sm text-info mt-0.5">&ldquo;{justSubmitted}&rdquo; is now awaiting your supervisor&apos;s review. Duties unlock once competency is confirmed.</p>
             </div>
           </div>
         )}
@@ -105,8 +105,8 @@ export default function ParaPage() {
           return (
             <div key={day}>
               <div className="flex items-center gap-2 mb-3">
-                <h2 className="font-semibold text-slate-900">{day}-Day Track</h2>
-                {trackDone && <Badge className="bg-emerald-100 text-emerald-700 text-xs">Complete</Badge>}
+                <h2 className="font-semibold text-ink">{day}-Day Track</h2>
+                {trackDone && <Badge className="bg-passbg text-pass text-xs">Complete</Badge>}
               </div>
               <div className="space-y-3">
                 {mods.map(cm => {
@@ -115,30 +115,30 @@ export default function ParaPage() {
                   const done = isCompleted(cm.moduleId);
                   const awaiting = isAwaiting(cm.moduleId);
                   return (
-                    <div key={cm.moduleId} className={`rounded-xl border p-4 ${done ? 'border-emerald-200 bg-emerald-50/50' : awaiting ? 'border-blue-200 bg-blue-50/40' : locked ? 'border-slate-200 bg-slate-50 opacity-60' : 'border-slate-200 bg-white'}`}>
+                    <div key={cm.moduleId} className={`rounded-xl border p-4 ${done ? 'border-pass/30 bg-passbg/60' : awaiting ? 'border-info/30 bg-infobg/60' : locked ? 'border-line bg-paper opacity-60' : 'border-line bg-card'}`}>
                       <div className="flex items-start gap-3">
-                        <div className={`h-9 w-9 rounded-lg flex items-center justify-center shrink-0 ${done ? 'bg-emerald-500' : awaiting ? 'bg-blue-100' : locked ? 'bg-slate-200' : 'bg-indigo-100'}`}>
-                          {done ? <CheckCircle className="h-4 w-4 text-white" /> : awaiting ? <Clock className="h-4 w-4 text-blue-600" /> : locked ? <Lock className="h-4 w-4 text-slate-400" /> : <Play className="h-4 w-4 text-indigo-600" />}
+                        <div className={`h-9 w-9 rounded-lg flex items-center justify-center shrink-0 ${done ? 'bg-pass' : awaiting ? 'bg-infobg' : locked ? 'bg-line' : 'bg-accent/15'}`}>
+                          {done ? <CheckCircle className="h-4 w-4 text-white" /> : awaiting ? <Clock className="h-4 w-4 text-info" /> : locked ? <Lock className="h-4 w-4 text-inkfaint" /> : <Play className="h-4 w-4 text-accent" />}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <h3 className="font-medium text-sm text-slate-900">{mod.title}</h3>
-                            <span className="flex items-center gap-1 text-xs text-slate-400"><Clock className="h-3 w-3" />{mod.duration}</span>
-                            {awaiting && <Badge className="bg-blue-100 text-blue-700 text-xs">Awaiting sign-off</Badge>}
+                            <h3 className="font-medium text-sm text-ink">{mod.title}</h3>
+                            <span className="flex items-center gap-1 text-xs text-inkfaint"><Clock className="h-3 w-3" />{mod.duration}</span>
+                            {awaiting && <Badge className="bg-infobg text-info text-xs">Awaiting sign-off</Badge>}
                           </div>
-                          <p className="text-sm text-slate-600 mt-1">{mod.description}</p>
+                          <p className="text-sm text-inkmute mt-1">{mod.description}</p>
                           <div className="flex flex-wrap gap-1.5 mt-2">
                             {mod.duties.map(d => (
-                              <span key={d} className="text-xs text-slate-400 flex items-center gap-1"><Unlock className="h-2.5 w-2.5" />{d}</span>
+                              <span key={d} className="text-xs text-inkfaint flex items-center gap-1"><Unlock className="h-2.5 w-2.5" />{d}</span>
                             ))}
                           </div>
                           {!done && !awaiting && !locked && (
-                            <Button onClick={() => { setActiveModule(mod); setWatchedEnough(false); }} size="sm" className="mt-3 bg-indigo-600 hover:bg-indigo-700 text-white">
+                            <Button onClick={() => { setActiveModule(mod); setWatchedEnough(false); }} size="sm" className="mt-3 bg-accent hover:bg-accent-hover text-white">
                               <Play className="h-3.5 w-3.5 mr-1" /> Start module
                             </Button>
                           )}
-                          {awaiting && <p className="text-xs text-blue-600 mt-2">Watched — your supervisor will confirm competency to unlock duties.</p>}
-                          {locked && <p className="text-xs text-slate-400 mt-2 italic">Complete the previous track to unlock</p>}
+                          {awaiting && <p className="text-xs text-info mt-2">Watched — your supervisor will confirm competency to unlock duties.</p>}
+                          {locked && <p className="text-xs text-inkfaint mt-2 italic">Complete the previous track to unlock</p>}
                         </div>
                       </div>
                     </div>
@@ -152,32 +152,32 @@ export default function ParaPage() {
 
       {activeModule && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50" onClick={() => setActiveModule(null)}>
-          <div className="bg-white rounded-2xl max-w-2xl w-full overflow-hidden" onClick={e => e.stopPropagation()}>
+          <div className="bg-card rounded-2xl max-w-2xl w-full overflow-hidden" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between px-5 py-3 border-b">
               <h3 className="font-semibold text-sm">{activeModule.title}</h3>
-              <button onClick={() => setActiveModule(null)} className="text-slate-400 hover:text-slate-600"><X className="h-4 w-4" /></button>
+              <button onClick={() => setActiveModule(null)} className="text-inkfaint hover:text-inkmute"><X className="h-4 w-4" /></button>
             </div>
-            <div className="aspect-video bg-gradient-to-br from-slate-800 to-slate-900 flex flex-col items-center justify-center text-center px-8">
-              <div className="h-16 w-16 rounded-full bg-white/10 flex items-center justify-center mb-4">
+            <div className="aspect-video bg-gradient-to-br from-ink to-[#15130f] flex flex-col items-center justify-center text-center px-8">
+              <div className="h-16 w-16 rounded-full bg-card/10 flex items-center justify-center mb-4">
                 <Play className="h-7 w-7 text-white ml-1" />
               </div>
               <p className="text-white font-medium">{activeModule.title}</p>
-              <p className="text-slate-400 text-sm mt-1">{activeModule.duration} branching scenario video</p>
-              <p className="text-slate-500 text-xs mt-4 max-w-sm">
+              <p className="text-inkfaint text-sm mt-1">{activeModule.duration} branching scenario video</p>
+              <p className="text-inkmute text-xs mt-4 max-w-sm">
                 Production modules are SME-produced branching scenario videos. This placeholder represents the {activeModule.duration} module a paraprofessional would watch here.
               </p>
             </div>
             <div className="px-5 py-4">
               <label className="flex items-center gap-2 mb-3 cursor-pointer">
                 <input type="checkbox" checked={watchedEnough} onChange={e => setWatchedEnough(e.target.checked)} className="rounded" />
-                <span className="text-sm text-slate-700">I have watched this module and understand the protocol</span>
+                <span className="text-sm text-ink">I have watched this module and understand the protocol</span>
               </label>
-              <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 mb-4">
-                <p className="text-xs text-blue-700">
+              <div className="bg-infobg border border-info/20 rounded-lg p-3 mb-4">
+                <p className="text-xs text-info">
                   <span className="font-semibold">Next step — supervisor sign-off:</span> Submitting sends this to your supervisor, who confirms demonstrated competency via an observation checklist. Duties unlock only after they sign off.
                 </p>
               </div>
-              <Button onClick={() => submitModule(activeModule)} disabled={!watchedEnough} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white disabled:bg-slate-200">
+              <Button onClick={() => submitModule(activeModule)} disabled={!watchedEnough} className="w-full bg-accent hover:bg-accent-hover text-white disabled:bg-line">
                 <CheckCircle className="h-4 w-4 mr-1.5" /> Submit for supervisor sign-off
               </Button>
             </div>
